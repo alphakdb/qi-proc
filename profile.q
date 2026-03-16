@@ -6,7 +6,8 @@
   if[.qi.exists p:.qi.path(.conf.QI_HOME;`qi.profile);:p];
   .qi.info".profile.gen";
   ex:$[w:.qi.WIN;"";"export "];
-  pr:enlist ex,.profile.makeenv[`SSL_VERIFY_SERVER;"NO"];
+  pr:enlist"#",ex,.profile.makeenv[`GITHUB_TOKEN;""];
+  pr,:enlist ex,.profile.makeenv[`SSL_VERIFY_SERVER;"NO"];
   /if[not first ssl:.qi.try[-26!;::;{x}];
   if[.qi.WIN;
     .qi.importx[`fetch;dw:`$"deps-win"];
