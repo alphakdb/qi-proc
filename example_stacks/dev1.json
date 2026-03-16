@@ -1,0 +1,34 @@
+{
+  "description": "Dev 1",
+  "base_port": 9000,
+  "processes": {
+    "tp1": {
+      "pkg": "tp",
+      "port_offset": 10
+    },
+    "rdb1": {
+      "pkg": "rdb",
+      "port_offset": 11,
+      "subscribe_to": {
+          "tp1": "*"
+      }
+    },
+    "wdb1": {
+      "pkg": "wdb",
+      "port_offset": 12,
+      "subscribe_to": {
+        "tp1": "*"
+      },
+      "hdb": "hdb1"
+    },
+    "hdb1": {
+      "pkg": "hdb",
+      "port_offset": 13
+    },
+    "binance1": {
+      "pkg": "binance",
+      "port_offset": 100,
+      "publish_to": ["tp1"]
+    }
+  }
+}
