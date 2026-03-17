@@ -49,21 +49,23 @@
   pkgs:([]name:key sp)!(key[def]#/:def,/:get sp),'([]options:_[key def]each get sp);
   r:update`$pkg,7h$port_offset,`$publish_to,`$subscribe_to,7h$port from pkgs;
   r:update hostname:cfg`hostname,port:port_offset+cfg`base_port from r where null port,not null port_offset;
-  sv[`;`.proc.stacks,st:first` vs last` vs p]set cfg,enlist[`processes]!enlist r;
+  sv[`;`.proc.stacks,st:last` vs first` vs p]set cfg,enlist[`processes]!enlist r;
   sv[`;`.proc.stackpaths,st]set p;
   }
 
 .proc.loadstacks:{[st]
-  if[not count p:.qi.paths[.conf.STACKS;"*.json"];
-    p,:{.qi.cp[x;(.conf.STACKS;`examples),last ` vs x]}each .qi.paths[.qi.pkgs[`proc],`example_stacks;"*.json"]];
-  d:p group last each ` vs'p;
-  if[not[st~`]&11=abs type st;d:(` sv'((),st),'`json)#d];
-  if[0<count empty:where 0=count each d;'"No stack files found for "," "sv string empty];
-  if[count dupes:where 1<count each d;
-    -1 "\n",.Q.s dupes#d;
-    '"Duplicate stack names not allowed"];
+  if[not count p:.qi.paths[.conf.STACKS;"*stack.json"];
+    p,:{
+        .qi.os.ensuredir targ:.qi.path(.conf.STACKS;st:first ` vs f:last v:` vs x);
+        .qi.cp[x;targ,`stack.json]}each .qi.paths[.qi.pkgs[`proc],`example_stacks;"*.json"]];
+ / d:p group last each ` vs'p;
+ / if[not[st~`]&11=abs type st;d:(` sv'((),st),'`json)#d];
+ / if[0<count empty:where 0=count each d;'"No stack files found for "," "sv string empty];
+ / if[count dupes:where 1<count each d;
+  /  -1 "\n",.Q.s dupes#d;
+  /  '"Duplicate stack names not allowed"];
   .proc.stacks:1#.q;
-  .proc.load1stack each get[d][;0];
+  .proc.load1stack each p;
   if[count err1:sl where max w:(sl:1_key .proc.stacks)like/:string[pl:exec k from .qi.packages],'"*";
     '"Cannot have a stack name that is similar to a package name: stacks=",(-3!err1)," packages=",-3!pl where max flip w];
   if[count dupes:select from .proc.getstacks[]where 1<(count;i)fby([]stackname;hostname;port);

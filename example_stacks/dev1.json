@@ -30,6 +30,11 @@
       "port_offset": 100,
       "publish_to": ["tp1"]
     },
+    "kraken1": {
+      "pkg": "kraken",
+      "port_offset": 101,
+      "publish_to": ["tp1"]
+    },
     "gw1": {
       "pkg": "gw",
       "port_offset": 50
