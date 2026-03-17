@@ -126,15 +126,15 @@ healthpath:{[pname;sname;pid] .qi.local(`.qi;`health;sname;first` vs pname),pid}
 
 reporthealth:{
   healthpath[nm:self.name;st:self.stackname;`latest]set pd:.z.i;
-  healthpath[nm;self.stackname;pd]set d:select time:.z.p,used,heap from .Q.w`;
-  if[nm<>`hub;if[isup[`hub;`hub];.ipc.ping[`hub;(`heartbeat;self.fullname;update pid:pd from d)]]];
+  healthpath[nm;self.stackname;pd]set d:select lastheartbeat:.z.p,used,heap from .Q.w`;
+  /if[nm<>`hub;if[isup[`hub;`hub];.ipc.ping[`hub;(`heartbeat;self.fullname;update pid:pd from d)]]];
   }
 
 gethealth:{[pname;sname] 
-  d:enlist[`pid]!1#0Ni;
+  d:`pid`lastheartbeat`used`heap`path!(0Ni;0Np;0N;0N;`);
   if[not .qi.exists p:healthpath[pn:first` vs pname;sname;`latest];:d];
   if[not .qi.exists hp:healthpath[pn;sname;pid:get p];:d];
-  (`pid`path!(pid;hp)),get hp
+  (d,`pid`path!(pid;hp)),get hp
   }
 
 showstatus:{[x]
@@ -146,7 +146,9 @@ showstatus:{[x]
 
 getpid:{[pname;sname] gethealth[pname;sname]`pid}
 
-isup:{[pname;sname] $[null pid:(d:gethealth[pname;sname])`pid;0b;os.isup pid;1b;[hdel d`path;0b]]} 
+checkhealth:{[pname;sname] ($[null d`pid;0b;os.isup d`pid;1b;[hdel d`path;0b]];`path _d:gethealth[pname;sname])} 
+
+isup:{[pname;sname] first checkhealth[pname;sname]}
 
 up:{[x]
   if[isstack x;:.z.s each stackprocs x];
