@@ -163,7 +163,7 @@ down:{
     if[not null h:.ipc.conn nm;
       neg[h](`.proc.quit;self.name);
       neg[h][];
-      if[mc:0^.conf.MAX_CONNS;if[mc<=count .z.W;if[not .qi.WIN;-1"sleep";system"sleep 0.3";hclose h;.z.pc h]]]];
+      if[mc:0^.conf.MAX_CONNS;if[mc<=count .z.W;if[not .qi.WIN;system"sleep 0.3";hclose h;.z.pc h]]]];
   }
 
 kill:{
