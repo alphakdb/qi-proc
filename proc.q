@@ -127,7 +127,6 @@ healthpath:{[pname;sname;pid] .qi.local(`.qi;`health;sname;first` vs pname),pid}
 reporthealth:{
   healthpath[nm:self.name;st:self.stackname;`latest]set pd:.z.i;
   healthpath[nm;self.stackname;pd]set d:select lastheartbeat:.z.p,used,heap from .Q.w`;
-  /if[nm<>`hub;if[isup[`hub;`hub];.ipc.ping[`hub;(`heartbeat;self.fullname;update pid:pd from d)]]];
   }
 
 gethealth:{[pname;sname] 
@@ -161,7 +160,10 @@ up:{[x]
 down:{
     if[isstack x;.z.s each stackprocs x;:(::)];
     nm:$[self.stackname=last n:fromfullname x;n 0;` sv n];
-    .ipc.ping[nm;(`.proc.quit;self.name)];
+    if[not null h:.ipc.conn nm;
+      neg[h](`.proc.quit;self.name);
+      neg[h][];
+      if[mc:0^.conf.MAX_CONNS;if[mc<=count .z.W;if[not .qi.WIN;-1"sleep";system"sleep 0.3";hclose h;.z.pc h]]]];
   }
 
 kill:{
