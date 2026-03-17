@@ -3,7 +3,7 @@
 .feed.H:0#0i
 .feed.pc:{[h] .feed.H:.feed.H except h;.qi.info "tp disconnected - switched to modular mode"}
 
-.feed.requirekey:{[c] if[count m:((),c)except key .conf;.qi.error"Missing required API-Key(s) in .conf: ",","sv string[m];.qi.error"Please see https://qi.alphakdb.com/configuration#api-keys";exit 0]}
+.feed.requirekey:{[c] if[count m:((),c)except key .conf;.qi.fatal"Missing required API-Key(s) in .conf: ",(","sv string m),"\nPlease see https://qi.alphakdb.com/configuration#api-keys"]}
 
 .feed.upd:{[t;x]
   t insert x;
