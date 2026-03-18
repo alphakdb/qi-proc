@@ -58,12 +58,6 @@
     p,:{
         .qi.os.ensuredir targ:.qi.path(.conf.STACKS;st:first ` vs f:last v:` vs x);
         .qi.cp[x;targ,`stack.json]}each .qi.paths[.qi.pkgs[`proc],`example_stacks;"*.json"]];
- / d:p group last each ` vs'p;
- / if[not[st~`]&11=abs type st;d:(` sv'((),st),'`json)#d];
- / if[0<count empty:where 0=count each d;'"No stack files found for "," "sv string empty];
- / if[count dupes:where 1<count each d;
-  /  -1 "\n",.Q.s dupes#d;
-  /  '"Duplicate stack names not allowed"];
   .proc.stacks:1#.q;
   .proc.load1stack each p;
   if[count err1:sl where max w:(sl:1_key .proc.stacks)like/:string[pl:exec k from .qi.packages],'"*";
