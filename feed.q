@@ -1,7 +1,7 @@
 / Common library used by websocket feed handlers
 
 .feed.H:0#0i
-.feed.pc:{[h] if[h in .feed.H;.feed.H:.feed.H except h;.qi.info "tp disconnected - switched to modular mode"]}
+.feed.pc:{[h] if[h in .feed.H;.feed.H:.feed.H except h;.qi.info "tp disconnected - buffering data locally"]}
 
 .feed.requirekey:{[c] if[count m:((),c)except key .conf;.qi.fatal"Missing required API-Key(s) in .conf: ",(","sv string m),"\nPlease see https://qi.alphakdb.com/configuration#api-keys"]}
 
