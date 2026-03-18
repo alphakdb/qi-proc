@@ -21,7 +21,7 @@
 .feed.start:{[header;url]
     .qi.info(`.feed.start;header;url);
     if[.qi.isproc;.feed.tpreconnect[];
-      if[not count .feed.H;.qi.info"Could not connect to tp - switched to modular mode"]];
+      if[not count .feed.H;.qi.info"Could not connect to tp - buffering data locally"]];
     .qi.info"Connection sequence initiated...";
     if[first c:.qi.try[url;header;0Ni];
       :.qi.info"Connection success"];
@@ -30,7 +30,6 @@
     if[not null p:.profile.gen`;
       .qi.error"Try sourcing the profile before running\n\n";
       -1"------------ SUGGESTED COMMANDS ------------ ";
-     / -1" good) ", $[.qi.WIN;". ";"source "],.qi.ospath[p]," && q "," "sv 1_.z.X; 
       -1 $[.qi.WIN;"Source:     Invoke-Expression (Get-Content '",.qi.spath[p],"' -Raw)\nAlias:      function qi { q qi.q @args }";
           "alias qi='source ",.qi.spath[p]," && q qi.q'\nqi "," "sv .z.x],"\n";
       exit 1];
