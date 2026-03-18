@@ -120,11 +120,11 @@ if[0=count .qi.getconf[`QI_CMD;""];
 
 .proc.reporthealth:{
   .proc.healthpath[nm:.proc.self[`name];st:.proc.self[`stackname];`latest]set pd:.z.i;
-  .proc.healthpath[nm;.proc.self[`stackname];pd]set d:select lastheartbeat:.z.p,used,heap from .Q.w`;
+  .proc.healthpath[nm;.proc.self[`stackname];pd]set d:select heartbeat:.z.p,used,heap from .Q.w`;
   }
 
 .proc.gethealth:{[pname;sname]
-  d:`pid`lastheartbeat`used`heap`path!(0Ni;0Np;0N;0N;`);
+  d:`pid`heartbeat`used`heap`path!(0Ni;0Np;0N;0N;`);
   if[not .qi.exists p:.proc.healthpath[pn:first` vs pname;sname;`latest];:d];
   if[not .qi.exists hp:.proc.healthpath[pn;sname;pid:get p];:d];
   (d,`pid`path!(pid;hp)),get hp
@@ -139,7 +139,14 @@ if[0=count .qi.getconf[`QI_CMD;""];
 
 .proc.getpid:{[pname;sname] .proc.gethealth[pname;sname]`pid}
 
-.proc.checkhealth:{[pname;sname] ($[null d`pid;0b;.proc.os.isup d`pid;1b;[hdel d`path;0b]];`path _d:.proc.gethealth[pname;sname])}
+.proc.checkhealth:{[pname;sname] 
+  d:.proc.gethealth[pname;sname];
+  if[up:not null d`pid;
+      if[.conf.REPORT_HEALTH_PERIOD<.z.p-d`heartbeat;
+        if[not up:.proc.os.isup d`pid;
+          hdel d`path]]];
+  (up;`path _d)
+  }
 
 .proc.isup:{[pname;sname] first .proc.checkhealth[pname;sname]}
 
