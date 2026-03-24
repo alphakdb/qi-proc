@@ -182,6 +182,14 @@ if[0=count .qi.getconf[`QI_CMD;""];
 .proc.tailx:{[pname;n] $[.qi.exists l:.proc.getlog pname;.proc.os.tail[l;n];'"Log file not found: ",.qi.tostr l]}
 .proc.tail:{[pname] .proc.tailx[pname;.conf.TAIL_ROWS]}
 
+.proc.ui.init:{
+  .z.ws:{
+    r:get(a:.j.k x)`cmd;
+    if[`text=fmt:`$a`format;if[10<>type r;r:.Q.s r]];
+    neg[.z.w] -8!select format:fmt,result:r from a
+    };
+  }
+
 .proc.exit:{if[not null nm:.proc.self.name;.qi.deldir .proc.healthpath[nm;.proc.self.stackname;()]]}
 
 .proc.loadstacks`
