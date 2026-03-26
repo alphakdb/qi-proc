@@ -184,9 +184,15 @@ if[0=count .qi.getconf[`QI_CMD;""];
 
 .proc.ui.init:{
   .z.ws:{
+    system"c 500 500";
     r:get(a:.j.k x)`cmd;
-    if[`text=fmt:`$a`format;if[10<>type r;r:.Q.s r]];
-    neg[.z.w] -8!select format:fmt,result:r from a
+    d:a,`type`count!(t:type r;count r);
+    if[.Q.qt r;
+      d:((k:`pagestart`pagesize)!0 100),d;
+      r:select[get k#d]from r];
+    if[`text=fmt:`$a`format;if[10<>t;r:.Q.s r]];
+    d,:select format:fmt,result:r from a;
+    neg[.z.w] -8!d
     };
   }
 
