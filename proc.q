@@ -186,11 +186,11 @@ if[0=count .qi.getconf[`QI_CMD;""];
   .z.ws:{
     system"c 500 500";
     r:get(a:.j.k x)`cmd;
-    d:a,`type`count!(t:type r;count r);
+    d:((1#`format)!1#`text),a,`type`count!(t:type r;count r);
     if[.Q.qt r;
       d:((k:`pagestart`pagesize)!0 100),d;
       r:select[get k#d]from r];
-    if[`text=fmt:`$a`format;if[10<>t;r:.Q.s r]];
+    if[`text=fmt:.qi.tosym d`format;if[10<>t;r:.Q.s r]];
     d,:select format:fmt,result:r from a;
     neg[.z.w] -8!d
     };
